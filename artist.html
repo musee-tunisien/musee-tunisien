@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <title>Détails de l'Artiste</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    .artist-container {
+      display: flex;
+      max-width: 1200px;
+      margin: 50px auto;
+      gap: 40px;
+    }
+    .artist-image {
+      flex: 1;
+    }
+    .artist-image img {
+      width: 100%;
+      border-radius: 8px;
+    }
+    .artist-info {
+      flex: 1;
+    }
+  </style>
+</head>
+<body>
+  <div class="artist-container">
+    <div class="artist-image">
+      <img id="artwork-image" src="" alt="">
+    </div>
+    <div class="artist-info">
+      <h1 id="artwork-title"></h1>
+      <h2 id="artist-name"></h2>
+      <div id="artist-details"></div>
+      <a href="index.html" class="back-button">← Retour à la galerie</a>
+    </div>
+  </div>
+
+  <script>
+    // Get artwork data from URL
+    const urlParams = new URLSearchParams(window.location.search);
+    const artworkId = parseInt(urlParams.get('id'));
+
+    // Match with your galleryData
+    const artwork = {
+      1: {
+        image: "assets/gallery/mona.png",
+        title: "Projet Kairouan/Suite Kairouan2015/2018",
+        artist: "Mouna Jemal Siala",
+        details: "Technique mixte sur toile, 150x200cm"
+      },
+      // Add other artworks matching your gallery.js IDs...
+      2: {
+        image: "assets/gallery/ali bellagha le belvédère.png",
+        title: "le belvédère",
+        artist: "Ali Bellagha",
+        details: "Huile sur toile, 2019"
+      },
+      3: {
+        image: "assets/gallery/wissem.png",
+        title: "Une métaphysique de la vie et de l’amour",
+        artist: "Wissem Ben Hassine",
+        details: "Huile sur toile"
+      },
+      4: {
+        image: "assets/gallery/nadia.jpeg",
+        title: "Kaché sous la pluie",
+        artist: "Nadia Jelassi",
+        details: "Huile sur toile"
+      },
+      5: {
+        image: "assets/gallery/mohamed.jpeg",
+        title: "Amour avec un grand tas",
+        artist: "Mohamed Ben Soltane",
+        details: "Huile sur toile",
+      },
+      6: {
+        image: "assets/gallery/najet.png",
+        title: "Me & Her 1",
+        artist: "Najet Dhahbi",
+        details: "Huile sur toile"
+      },
+      7: {
+        image: "assets/gallery/brahim.png",
+        title: "Fête",
+        artist: "Brahim Dhahak",
+        details: "Huile sur toile"
+      },
+      8: {
+        image: "assets/gallery/sonia.png",
+        title: "Les figures de l’ombre",
+        artist: "Sonia Said",
+        details: "Huile sur toile",
+      },
+      9: {
+        image: "assets/gallery/adel.jpg",
+        title: "Echiquier",
+        artist: "Adel Megdiche",
+        details: "Huile sur toile"
+      }
+    };
+    // Display data
+    if (artwork[artworkId]) {
+      document.getElementById('artwork-image').src = artwork[artworkId].image;
+      document.getElementById('artwork-title').textContent = artwork[artworkId].title;
+      document.getElementById('artist-name').textContent = artwork[artworkId].artist;
+      document.getElementById('artist-details').innerHTML = `
+        <p><strong>Technique:</strong> ${artwork[artworkId].details.split(',')[0]}</p>
+        <p><strong>Dimensions:</strong> ${artwork[artworkId].details.split(',')[1] || ''}</p>
+      `;
+    }
+  </script>
+</body>
+</html>
