@@ -113,20 +113,22 @@ button:active {
 /* 3D Model Container */
 .model-hero {
   width: 100%; /* Full width of parent */
-  max-width: 1000px; /* Maximum width */
-  height: 1000px; /* Fixed height */
-  margin: 40px auto; /* Centered with vertical spacing */
+  height: 66.67vh; /* Fixed height */
+  margin: 0; /* Centered with vertical spacing */
+  background: #f5f5f5;
   position: relative;
   overflow: hidden; /* Hide anything outside container */
   box-shadow: 0 4px 20px rgba(0,0,0,0.1);
 }
-
 #model-viewer {
   width: 100%;
   height: 100%;
   display: block;
 }
-
+.model-container {
+  position: relative;
+  z-index: 1; /* Lower than controls */
+}
 /* Canvas Interaction Styles */
 canvas {
   cursor: grab;
@@ -154,20 +156,28 @@ canvas.zooming {
 }
 
 /* Hero Section */
-.hero {
+.model-hero-container {
   position: relative;
-  height: auto;
-  padding: 40px 0;
-  background: white;
+  width: 100%;
+  height: 100vh; /* Full viewport height (adjust if needed) */
+}
+.hero {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 2; /* Higher than model */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent; /* Remove any background */
 }
 
 .hero-content {
-  position: relative;
-  z-index: 1;
   width: 100%;
   max-width: 1200px;
   padding: 0 20px;
-  margin: 0 auto;
   text-align: center;
 }
 
@@ -179,14 +189,13 @@ canvas.zooming {
 }
 
 .overlay-text {
-  background: rgba(255, 255, 255, 0.9);
+  background: rgba(255, 255, 255, 0.5); /* Semi-transparent white */
   padding: 40px;
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
   max-width: 800px;
   margin: 0 auto;
-  text-align: center;
-  border-radius: 12px;
-  box-shadow: 0 4px 20px rgba(0,0,0,0.1);
-  border: 1px solid rgba(0,0,0,0.05);
 }
 
 .overlay-text h1 {
@@ -204,19 +213,19 @@ canvas.zooming {
 
 /* Controls Help */
 .controls-help {
-  position: fixed;
+  position: absolute;
   bottom: 20px;
   left: 20px;
-  background: rgba(255, 255, 255, 0.95);
+  background: rgba(255, 255, 255, 0.5);
   color: #333;
   padding: 15px 20px;
   border-radius: 10px;
-  z-index: 100;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  z-index: 100; /* Ensure it's above the model */
   font-size: 14px;
   border: 1px solid rgba(0,0,0,0.1);
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
 }
-
 .controls-help p {
   margin: 8px 0;
   line-height: 1.5;
@@ -228,56 +237,55 @@ canvas.zooming {
   font-size: 15px;
   color: #000;
 }
+.model-viewer-wrapper {
+  position: relative;
+  width: 100%;
+  margin: 0 auto;
+}
 
-/* Gallery Section */
+/* Gallery Section - Fixed Version *//
 .gallery-section {
   padding: 80px 5%;
   background: white;
 }
-
 .gallery-header {
   text-align: center;
   margin-bottom: 40px;
 }
-
 .gallery-header h2 {
   font-size: 2.5rem;
   color: #000;
 }
-
 .gallery-grid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 30px;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 9px; /* Now affects BOTH horizontal and vertical gaps */
   max-width: 1200px;
   margin: 0 auto;
+  padding: 9px; /* Adds 9px outer gap to match inner gaps */
 }
-
+/* Gallery Item Base */
 .gallery-item {
-  height: 380px;
+  width: 100%; /* Fills grid column */
+  height: 300px; /* Fixed height */
   position: relative;
   overflow: hidden;
   border-radius: 8px;
   box-shadow: 0 4px 8px rgba(0,0,0,0.1);
   transition: all 0.3s ease;
 }
-
-.gallery-item:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 8px 20px rgba(0,0,0,0.15);
-}
-
+/* Image Styles */
 .gallery-item img {
   width: 100%;
   height: 100%;
-  object-fit: cover;
+  object-fit: cover; /* Crops to fill */
   transition: transform 0.4s;
 }
 
 .gallery-item:hover img {
   transform: scale(1.05);
 }
-
+/* Overlay Styles */
 .overlay {
   position: absolute;
   bottom: 0;
@@ -312,7 +320,6 @@ canvas.zooming {
   height: 100%;
   z-index: 2;
 }
-
 /* Art Section */
 .art-section {
   padding: 80px 5%;
@@ -535,4 +542,31 @@ canvas.zooming {
 :focus-visible {
   outline: 2px solid #000;
   outline-offset: 2px;
+}
+@media (max-width: 768px) {
+  .controls-help {
+    font-size: 12px;
+    padding: 12px 15px;
+    bottom: 15px;
+    left: 15px;
+    right: 15px;
+  }
+}
+@media (max-width: 900px) {
+  .gallery-grid {
+    grid-template-columns: repeat(auto-fill, minmax(318px, 1fr)); /* Keep 9px gap */
+  }
+}
+
+@media (max-width: 600px) {
+  .gallery-grid {
+    grid-template-columns: 1fr; /* Single column on mobile */
+  }
+  
+  .gallery-item {
+    width: 100%; /* Full width minus 18px (9px gap × 2) */
+    max-width: 300px; /* Prevents stretching beyond 300px */
+    height: 300px;
+    margin: 0 auto; /* Centers items */
+  }
 }
